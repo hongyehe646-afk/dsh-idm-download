@@ -1,0 +1,53 @@
+{
+  "name": "dsh-idm-download",
+  "version": "0.1.0",
+  "description": "把 DeepSeek Harness 的下载交给 Internet Download Manager：多线程加速 GitHub 等慢速源。Hand DSH downloads to IDM and wait for the finished file.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "scripts",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "dsh-plugins",
+    "deepseek-harness",
+    "idm",
+    "internet-download-manager",
+    "download",
+    "accelerator",
+    "github",
+    "windows"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hongyehe646-afk/dsh-idm-download.git"
+  },
+  "homepage": "https://github.com/hongyehe646-afk/dsh-idm-download#readme",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dshTarget": "0.2.1-rc.2",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "install": {
+      "preferred": "tarball",
+      "tarball": "https://github.com/hongyehe646-afk/dsh-idm-download/archive/refs/heads/main.tar.gz",
+      "zip": "https://github.com/hongyehe646-afk/dsh-idm-download/archive/refs/heads/main.zip",
+      "git": "https://github.com/hongyehe646-afk/dsh-idm-download.git"
+    }
+  }
+}

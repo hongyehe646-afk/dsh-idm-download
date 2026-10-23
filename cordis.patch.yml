@@ -1,0 +1,9 @@
+# dsh-idm-download bundle patch
+#
+# 只注册一个 Host 插件：idm-download（lib/index.js）
+# 工具：idm_download / idm_status
+
+- insert:
+    - id: idm-download
+      name: 'dsh-idm-download'
+      inject: [tools]
