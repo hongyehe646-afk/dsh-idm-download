@@ -169,6 +169,30 @@ function Wait-Dialog($ProcessId, [int[]]$Exclude, [scriptblock]$Match, [int]$Tim
   return $null
 }
 
+# IDM likes to pop a Yes/No box in the middle of a running download, for example:
+#   The file to be saved is named "v2.7.0", but the server the following file name
+#   "cleanyourtv-2.7.0.zip". Do you want to save the file using the name provided
+#   by the server?
+# Nobody clicks it, so the transfer stalls behind the modal and the caller waits
+# forever. Auto-answer "yes" (prefer the server name) and let the caller rename
+# the finished file afterwards.
+function Answer-YesNoPrompt($ProcessId, $Exclude) {
+  foreach ($w in @(Get-TopWindows $ProcessId)) {
+    if (-not $w.Visible -or $w.Class -ne '#32770') { continue }
+    if ($Exclude -contains [int64]$w.Handle) { continue }
+    $kids = Get-Kids $w.Handle
+    $buttons = @($kids | Where-Object { $_.Class -eq 'Button' })
+    if ($buttons.Count -ne 2) { continue }
+    $yes = $buttons | Where-Object { $_.Text -match '^\s*(是|Yes)' } | Select-Object -First 1
+    $no = $buttons | Where-Object { $_.Text -match '^\s*(否|No)' } | Select-Object -First 1
+    if (-not ($yes -and $no)) { continue }
+    Click-Btn $yes.Handle
+    Start-Sleep -Milliseconds 120
+    return $w.Handle
+  }
+  return $null
+}
+
 # ---------------------------------------------------------------- IDM specifics
 
 $IdmCandidates = @(
@@ -339,6 +363,7 @@ function Invoke-Add {
 
   while ((Get-Date) -lt $deadline -and -not $infoSeen) {
     Start-Sleep -Milliseconds 200
+    $null = Answer-YesNoPrompt $proc.Id @([int64]$main)
     $dlgs = @(Get-TopWindows $proc.Id | Where-Object { $_.Visible -and $_.Class -eq '#32770' })
     foreach ($d in $dlgs) {
       $kids = Get-Kids $d.Handle
@@ -402,6 +427,10 @@ function Invoke-Add {
 
   while ((Get-Date) -lt $limit) {
     Start-Sleep -Milliseconds 500
+
+    # A mid-transfer Yes/No box (server file-name mismatch, overwrite, ...) would
+    # otherwise freeze the transfer until the timeout expires.
+    $null = Answer-YesNoPrompt $proc.Id @([int64]$main)
 
     # Any file that appeared or changed after the handoff is a candidate. The
     # fingerprint check keeps unrelated recent files out of the result.
