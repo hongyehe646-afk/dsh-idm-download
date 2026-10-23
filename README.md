@@ -38,15 +38,24 @@ GitHub / `raw.githubusercontent.com` 这类源经常对单连接限速，或者�
 
 ## 安装
 
+**桌面端（Electron 管理的 profile）只能用界面装：**
+
+1. 左侧栏 → **插件**（Plugins）
+2. 右上 **Add plugin**
+3. 粘进 Git 地址：`github:hongyehe646-afk/dsh-idm-download`
+4. **Install** → 装完点 **Enable now**（或重启 DSH）
+
+**命令行 profile：**
+
 ```bash
-# 直接从 GitHub 装
-dsh plugin add github:hongyehe646-afk/dsh-idm-download
+# 注意 --profile 必须放在 add 前面
+dsh plugin --profile <profile> add github:hongyehe646-afk/dsh-idm-download
 
 # 或者用压缩包（国内网络更稳）
-dsh plugin add https://github.com/hongyehe646-afk/dsh-idm-download/archive/refs/heads/main.zip
+dsh plugin --profile <profile> add https://github.com/hongyehe646-afk/dsh-idm-download/archive/refs/heads/main.zip
 ```
 
-装完重启 DSH（或在插件页里启用 `idm-download`）。卸载：`dsh plugin remove dsh-idm-download`。
+卸载：插件页里 Remove，或 `dsh plugin --profile <profile> remove dsh-idm-download`。
 
 ## ⚠️ 先解决代理，否则 GitHub 依然连不上
 
