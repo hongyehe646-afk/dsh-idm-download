@@ -1,10 +1,23 @@
 # dsh-idm-download
 
-把 **DeepSeek Harness（DSH）** 的下载交给 **Internet Download Manager（IDM）**，等文件真正落盘后再把路径交还给模型。
+**给 DSH 里的智能体自己用的下载加速器。** 模型要拉插件、拉仓库归档、拉 release 二进制、拉依赖包时，
+单线程 `curl` 往往慢到没法干活；把这条下载交给 **Internet Download Manager（IDM）** 多连接分段拉，
+落盘之后把路径交还给模型，模型拿着路径直接解包使用。
 
-GitHub / `raw.githubusercontent.com` 这类源经常对单连接限速，或者传到一半把连接掐掉；DSH 里用 `curl` 单流慢慢爬很难受。IDM 会开多连接分段拉同一个文件，通常快得多。这个插件就是那座桥：
+> 不是给用户点按钮下电影的下载器。它的存在意义是：**模型自己干活时别再被下载速度卡住。**
+
+GitHub / `codeload` / `raw.githubusercontent.com` 这类源经常对单连接限速，或者传到一半把连接掐掉；
+IDM 会开多连接分段拉同一个文件，通常快得多。这个插件就是那座桥：
 
 > Windows only · 需要本机已安装 IDM · DSH ≥ 0.2.0
+
+### 什么时候该用、什么时候不该用
+
+| 场景 | 走哪条 |
+| --- | --- |
+| 估计 ≥ 1 MB（release、仓库 zip/tar、插件包、二进制、模型、数据集） | `idm_download` |
+| 已知慢速/掐连接的源（github.com、codeload、raw.githubusercontent、sourceforge、npm tarball） | `idm_download` |
+| 几百字节 ~ 1 MB 的小文件、纯文本、API JSON | 普通 `curl` / `Invoke-WebRequest`，别惊动 IDM |
 
 ---
 
