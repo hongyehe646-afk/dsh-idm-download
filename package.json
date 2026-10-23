@@ -1,7 +1,7 @@
 {
   "name": "dsh-idm-download",
-  "version": "0.1.0",
-  "description": "把 DeepSeek Harness 的下载交给 Internet Download Manager：多线程加速 GitHub 等慢速源。Hand DSH downloads to IDM and wait for the finished file.",
+  "version": "0.1.1",
+  "description": "DeepSeek Harness (DSH) plugin: let the agent route its own slow/large downloads through Internet Download Manager. DSH 插件：让智能体把自己的下载交给 IDM 多线程加速。",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -15,18 +15,19 @@
     "scripts",
     "cordis.patch.yml",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "PITFALLS.md"
   ],
   "keywords": [
+    "accelerator",
+    "deepseek-harness",
+    "download",
     "dsh",
     "dsh-plugin",
     "dsh-plugins",
-    "deepseek-harness",
+    "github",
     "idm",
     "internet-download-manager",
-    "download",
-    "accelerator",
-    "github",
     "windows"
   ],
   "repository": {
